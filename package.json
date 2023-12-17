@@ -2,6 +2,7 @@
   "name": "grafos-2023",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://ronansr.github.io/grafos-2023/",
   "dependencies": {
     "@cloudscape-design/components": "^3.0.454",
     "@cloudscape-design/global-styles": "^1.0.17",
@@ -31,7 +32,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "react-scripts --max_old_space_size=4096 build"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -50,5 +52,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.0"
   }
 }
