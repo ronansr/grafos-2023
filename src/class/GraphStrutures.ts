@@ -456,6 +456,18 @@ class GraphStructures {
     return adjacencyMatrix;
   }
 
+  static getArrayEdgesEulerianCycle(aObj: {
+    edges: { source: number; target: number }[];
+  }) {
+    let edges = "";
+
+    for (let i = 0; i < aObj.edges.length; i++) {
+      edges = `${edges} ${edges ? " - " : ""} ${aObj.edges[i].source + 1}`;
+    }
+
+    return edges;
+  }
+
   static formatPrimResult(result: {
     edges: { source: number; target: number; weight: number }[];
     totalWeight: number;

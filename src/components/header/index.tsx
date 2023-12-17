@@ -174,15 +174,15 @@ const IncidenceTable = (props: { data: any }) => {
 
   return (
     <div>
-      <h2>Tabela de Incidencia</h2>
+      <h2>Tabela de Incidência</h2>
       <ul>
         {groupedData.map((item) => (
           <li key={item.node}>
-            <strong>Node {item.node}:</strong>
+            <strong>Nó {item.node + 1}:</strong>
             <ul>
               {item.edges.map((edgeItem) => (
                 <li key={edgeItem.edge}>
-                  Edge {edgeItem.edge} - Weight: {edgeItem.weight}
+                  Aresta {edgeItem.edge} - Peso: {edgeItem.weight}
                 </li>
               ))}
             </ul>
@@ -207,6 +207,8 @@ function Header() {
   const [primResult, setPrimResult] = useState<any>();
   const [dijkstraResult, setDijkstraResult] = useState<any>();
   const [showStrutures, setShowStrutures] = useState<boolean>(false);
+  const [eulerianCycleResult, setEulerianCycleResult] = useState<any>();
+  const [topologicalSortResult, setTopologicalSortResult] = useState<any>();
 
   const handleMenuClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -311,17 +313,16 @@ function Header() {
       case 5:
         // Ciclo Euleriano
         let resp = graphFromFile?.eulerianCycle();
-        console.log(resp);
+
+        setEulerianCycleResult(resp);
+        if (!resp) alert("Não tem ciclo euleriano");
+
         break;
       case 6:
         // Ordenação Topológica
         console.log("Executando Ordenação Topológica");
         if (graphFromFile) {
-          const adjcencyMatrix =
-            GraphStructures.generateGraphStructures(
-              graphFromFile
-            )?.adjacencyMatrix;
-          console.log(adjcencyMatrix);
+          setTopologicalSortResult(graphFromFile.topologicalSort());
         }
         break;
       default:
@@ -443,6 +444,18 @@ function Header() {
       )}
 
       {dijkstraResult ? <div>{JSON.stringify(dijkstraResult)}</div> : <></>}
+      {eulerianCycleResult ? (
+        <div>
+          {GraphStructures.getArrayEdgesEulerianCycle(eulerianCycleResult)}
+        </div>
+      ) : (
+        <></>
+      )}
+      {topologicalSortResult ? (
+        <div>{JSON.stringify(graphFromFile?.topologicalSort())}</div>
+      ) : (
+        <></>
+      )}
     </Container>
   );
 }

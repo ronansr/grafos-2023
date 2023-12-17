@@ -416,6 +416,38 @@ class Graph {
 
     return true;
   }
+
+  topologicalSort(): number[] | null {
+    const visited: boolean[] = Array(this.order).fill(false);
+    const stack: number[] = [];
+    const result: number[] = [];
+    const adjacencyMatrix =
+      GraphStructures.generateGraphStructures(this).adjacencyMatrix;
+
+    const deepFirstSearch = (node: number) => {
+      visited[node] = true;
+
+      for (let neighbor = 0; neighbor < this.order; neighbor++) {
+        if (adjacencyMatrix[node][neighbor] === 1 && !visited[neighbor]) {
+          deepFirstSearch(neighbor);
+        }
+      }
+
+      stack.push(node);
+    };
+
+    for (let node = 0; node < this.order; node++) {
+      if (!visited[node]) {
+        deepFirstSearch(node);
+      }
+    }
+
+    while (stack.length > 0) {
+      result.push(stack.pop()! + 1);
+    }
+
+    return result.length === this.order ? result : null;
+  }
 }
 
 export default Graph;
