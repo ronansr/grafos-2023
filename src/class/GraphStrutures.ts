@@ -53,7 +53,7 @@ class GraphStructures {
           ? -currentEdge.weight
           : 1;
         incidenceMatrix[targetIndex][currentEdge.id] = !graph.directed
-          ? -1
+          ? 1
           : graph.weightedEdge
           ? currentEdge.weight
           : 1;
@@ -443,23 +443,18 @@ class GraphStructures {
     return result.trim();
   }
 
-  // static exportDistanceMatrixToFile(
-  //   matrix: number[][],
-  //   filePath: string
-  // ): void {
-  //   try {
-  //     const fileContent = `${matrix.length}\n${matrix
-  //       .map((row) =>
-  //         row.map((value) => (value === Infinity ? "999" : value)).join(" ")
-  //       )
-  //       .join("\n")}`;
+  static createAdjacencyMatrixFromList(vertices: number[]): number[][] {
+    const matrixSize = vertices.length;
+    const adjacencyMatrix: number[][] = Array.from({ length: matrixSize }, () =>
+      Array(matrixSize).fill(0)
+    );
 
-  //     fs.writeFileSync(filePath, fileContent);
-  //     console.log(`Matriz de distâncias exportada para ${filePath}`);
-  //   } catch (error) {
-  //     console.error("Erro ao exportar a matriz de distâncias:", error);
-  //   }
-  // }
+    for (let i = 0; i < matrixSize - 1; i++) {
+      adjacencyMatrix[i][i + 1] = vertices[i + 1];
+    }
+
+    return adjacencyMatrix;
+  }
 
   static formatPrimResult(result: {
     edges: { source: number; target: number; weight: number }[];

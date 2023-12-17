@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -24,6 +24,175 @@ const menu = [
   { id: 6, name: "Ordenação topológica" },
 ];
 
+const AdjacencyMatrixTable = (props: { adjacencyMatrix: any }) => {
+  const { adjacencyMatrix } = props;
+  return (
+    <div>
+      <h2>Matriz de Adjacência</h2>
+      <table style={{ border: "1px solid black", borderCollapse: "collapse" }}>
+        <tbody>
+          <tr>
+            <td></td>
+            {adjacencyMatrix[0].map((_: any, colIndex: any) => (
+              <td
+                key={colIndex}
+                style={{
+                  border: "1px solid black",
+                  padding: "8px",
+                  fontWeight: "bold",
+                }}
+              >
+                {colIndex + 1}
+              </td>
+            ))}
+          </tr>
+          {adjacencyMatrix.map((row: any, rowIndex: any) => (
+            <tr key={rowIndex}>
+              <td
+                style={{
+                  border: "1px solid black",
+                  padding: "8px",
+                  fontWeight: "bold",
+                }}
+              >
+                {rowIndex + 1}
+              </td>
+              {row.map((value: any, colIndex: any) => (
+                <td
+                  key={colIndex}
+                  style={{ border: "1px solid black", padding: "8px" }}
+                >
+                  {value}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    // <div>
+    //   <h2>Matriz de Adjacência</h2>
+    //   <table style={{ border: "1px solid black", borderCollapse: "collapse" }}>
+    //     <tbody>
+    //       {adjacencyMatrix.map((row: any, rowIndex: any) => (
+    //         <tr key={rowIndex}>
+    //           {row.map((value: any, colIndex: any) => (
+    //             <td
+    //               key={colIndex}
+    //               style={{ border: "1px solid black", padding: "8px" }}
+    //             >
+    //               {value}
+    //             </td>
+    //           ))}
+    //         </tr>
+    //       ))}
+    //     </tbody>
+    //   </table>
+    // </div>
+  );
+};
+
+const IncidenceMatrixTable = (props: { incidenceMatrix: any }) => {
+  const { incidenceMatrix } = props;
+
+  return (
+    <div>
+      <h2>Matriz de Incidência</h2>
+      <table style={{ border: "1px solid black", borderCollapse: "collapse" }}>
+        <tbody>
+          <tr>
+            <td></td>
+            {incidenceMatrix[0].map((_: any, colIndex: any) => (
+              <td
+                key={colIndex}
+                style={{
+                  border: "1px solid black",
+                  padding: "8px",
+                  fontWeight: "bold",
+                }}
+              >
+                {colIndex + 1}
+              </td>
+            ))}
+          </tr>
+          {incidenceMatrix.map((row: any, rowIndex: any) => (
+            <tr key={rowIndex}>
+              <td
+                style={{
+                  border: "1px solid black",
+                  padding: "8px",
+                  fontWeight: "bold",
+                }}
+              >
+                {rowIndex + 1}
+              </td>
+              {row.map((value: any, colIndex: any) => (
+                <td
+                  key={colIndex}
+                  style={{ border: "1px solid black", padding: "8px" }}
+                >
+                  {value}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const IncidenceTable = (props: { data: any }) => {
+  const { data } = props;
+  const [groupedData, setGroupedData] = useState<
+    { node: number; edges: { edge: number; weight: number }[] }[]
+  >([]);
+
+  useEffect(() => {
+    const grouped = data.reduce((acc: any, currentItem: any) => {
+      const existingNode = acc.find(
+        (item: any) => item.node === currentItem.node
+      );
+
+      if (existingNode) {
+        existingNode.edges.push({
+          edge: currentItem.edge,
+          weight: currentItem.weight,
+        });
+      } else {
+        acc.push({
+          node: currentItem.node,
+          edges: [{ edge: currentItem.edge, weight: currentItem.weight }],
+        });
+      }
+
+      return acc;
+    }, [] as { node: number; edges: { edge: number; weight: number }[] }[]);
+
+    setGroupedData(grouped);
+  }, [data]);
+
+  return (
+    <div>
+      <h2>Tabela de Incidencia</h2>
+      <ul>
+        {groupedData.map((item) => (
+          <li key={item.node}>
+            <strong>Node {item.node}:</strong>
+            <ul>
+              {item.edges.map((edgeItem) => (
+                <li key={edgeItem.edge}>
+                  Edge {edgeItem.edge} - Weight: {edgeItem.weight}
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
 function Header() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedOption, setSelectedOption] = useState<{
@@ -37,6 +206,7 @@ function Header() {
   const [graphOutGraphViz, setGraphOutGraphViz] = useState<string>();
   const [primResult, setPrimResult] = useState<any>();
   const [dijkstraResult, setDijkstraResult] = useState<any>();
+  const [showStrutures, setShowStrutures] = useState<boolean>(false);
 
   const handleMenuClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -183,6 +353,14 @@ function Header() {
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
           >
+            <MenuItem
+              key={"ansf"}
+              onClick={() => setShowStrutures(!showStrutures)}
+              disabled={!graphFromFile}
+              style={{ borderBottomWidth: 1 }}
+            >
+              {showStrutures ? "Esconder estruturas" : "Mostrar Estrutura"}
+            </MenuItem>
             {menu?.map((item) => (
               <MenuItem
                 key={item.id}
@@ -211,6 +389,42 @@ function Header() {
           </Button>
         </Toolbar>
       </AppBar>
+
+      {showStrutures && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <AdjacencyMatrixTable
+            adjacencyMatrix={
+              graphFromFile
+                ? GraphStructures?.generateGraphStructures(graphFromFile)
+                    ?.adjacencyMatrix
+                : null
+            }
+          />
+          <IncidenceMatrixTable
+            incidenceMatrix={
+              graphFromFile
+                ? GraphStructures?.generateGraphStructures(graphFromFile)
+                    ?.incidenceMatrix
+                : null
+            }
+          />
+
+          <IncidenceTable
+            data={
+              graphFromFile
+                ? GraphStructures?.generateGraphStructures(graphFromFile)
+                    ?.incidenceTable
+                : null
+            }
+          />
+        </div>
+      )}
 
       {graphFromFile ? (
         <Graphviz dot={graphFromFile?.graphToGraphviz()} />
