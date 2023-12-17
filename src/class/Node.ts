@@ -61,20 +61,10 @@ class NodeGraph {
     this.weight = weight;
   }
 
-  // Outros métodos
-  searchEdge(targetId: number): boolean {
-    // Implementar lógica
-    return false;
-  }
-
-  insertEdge(targetId: number, weight: number): void {
-    const newEdge = new Edge(targetId, weight);
+  insertEdge(id: number, targetId: number, weight: number): void {
+    const newEdge = new Edge(id, targetId, weight);
     newEdge.nextEdge = this.firstEdge;
     this.firstEdge = newEdge;
-  }
-
-  removeAllEdges(): void {
-    // Implementar lógica
   }
 
   removeEdge(targetId: number): boolean {
@@ -123,11 +113,6 @@ class NodeGraph {
 
   decrementInDegree(): void {
     this.inDegree--;
-  }
-
-  hasEdgeBetween(targetId: number): Edge | null {
-    // Implementar lógica
-    return null;
   }
 }
 

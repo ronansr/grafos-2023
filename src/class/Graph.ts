@@ -81,11 +81,11 @@ class Graph {
         return;
       }
 
-      sourceNode.insertEdge(targetId, weight);
+      sourceNode.insertEdge(this.numberEdges, targetId, weight);
 
       if (!this.directed) {
         // If the graph is undirected, insert the reverse edge as well
-        targetNode.insertEdge(sourceId, weight);
+        targetNode.insertEdge(this.numberEdges, sourceId, weight);
       }
 
       this.numberEdges++;

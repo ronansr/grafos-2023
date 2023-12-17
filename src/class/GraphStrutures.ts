@@ -47,12 +47,12 @@ class GraphStructures {
           : 1;
 
         // Preenche a matriz de incidências
-        incidenceMatrix[sourceIndex][columnIndex] = graph.directed
+        incidenceMatrix[sourceIndex][currentEdge.id] = !graph.directed
           ? 1
           : graph.weightedEdge
-          ? currentEdge.weight
+          ? -currentEdge.weight
           : 1;
-        incidenceMatrix[targetIndex][columnIndex] = graph.directed
+        incidenceMatrix[targetIndex][currentEdge.id] = !graph.directed
           ? -1
           : graph.weightedEdge
           ? currentEdge.weight
@@ -60,8 +60,8 @@ class GraphStructures {
 
         // Preenche a tabela de incidências
         incidenceTable.push({
-          node: currentNode.id,
-          edge: columnIndex,
+          node: currentNode.id - 1,
+          edge: currentEdge.id,
           weight: graph.weightedEdge ? currentEdge.weight : 1,
         });
 

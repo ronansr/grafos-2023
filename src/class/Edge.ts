@@ -1,11 +1,13 @@
 // Implementação da classe Edge
 class Edge {
+  id: number;
   targetId: number;
   nextEdge: Edge | null;
   weight: number;
 
   // Construtor
-  constructor(targetId: number, weight?: number) {
+  constructor(id: number, targetId: number, weight?: number) {
+    this.id = id;
     this.targetId = targetId;
     this.nextEdge = null;
     this.weight = weight || 0.0;
