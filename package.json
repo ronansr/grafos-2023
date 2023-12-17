@@ -2,7 +2,7 @@
   "name": "grafos-2023",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ronansr.github.io/grafos-2023/",
+  "homepage": "https://ronansr.github.io/grafos-2023",
   "dependencies": {
     "@cloudscape-design/components": "^3.0.454",
     "@cloudscape-design/global-styles": "^1.0.17",
