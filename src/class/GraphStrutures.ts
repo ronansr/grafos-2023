@@ -42,9 +42,19 @@ class GraphStructures {
         // Preenche a matriz de adjacências
         const sourceIndex = nodeIndices.get(currentNode.id) as number;
         const targetIndex = nodeIndices.get(currentEdge.targetId) as number;
+
         adjacencyMatrix[sourceIndex][targetIndex] = graph.weightedEdge
           ? currentEdge.weight
           : 1;
+
+        // if (!graph.directed && targetIndex > sourceIndex)
+        //   adjacencyMatrix[sourceIndex][targetIndex] = graph.weightedEdge
+        //     ? currentEdge.weight
+        //     : 1;
+        // if (graph.directed)
+        //   adjacencyMatrix[sourceIndex][targetIndex] = graph.weightedEdge
+        //     ? currentEdge.weight
+        //     : 1;
 
         // Preenche a matriz de incidências
         incidenceMatrix[sourceIndex][currentEdge.id] = !graph.directed
@@ -93,11 +103,10 @@ class GraphStructures {
       }
 
       for (let i = 1; i <= order; i++) {
-        const distances = data[i].split(" ").map(Number);
+        const weights = data[i].split(" ").map(Number);
         for (let j = 0; j < order; j++) {
-          if (distances[j] !== 999 && distances[j] !== 0) {
-            // Assuming 999 represents infinity or unreachable
-            graph.insertEdge(i, j + 1, distances[j]);
+          if (weights[j] !== 999 && weights[j] !== 0) {
+            graph.insertEdge(i, j + 1, weights[j]);
           }
         }
       }
@@ -202,29 +211,29 @@ class GraphStructures {
     return graphDOT.join("\n");
   }
 
-  static adjacencyToIncidence(adjacencyMatrix: number[][]): number[][] {
-    const numVertices = adjacencyMatrix.length;
-    const numEdges = this.countEdges(adjacencyMatrix);
+  // static adjacencyToIncidence(adjacencyMatrix: number[][]): number[][] {
+  //   const numVertices = adjacencyMatrix.length;
+  //   const numEdges = this.countEdges(adjacencyMatrix);
 
-    const incidenceMatrix: number[][] = Array.from(
-      { length: numVertices },
-      () => Array(numEdges).fill(0)
-    );
+  //   const incidenceMatrix: number[][] = Array.from(
+  //     { length: numVertices },
+  //     () => Array(numEdges).fill(0)
+  //   );
 
-    let edgeIndex = 0;
+  //   let edgeIndex = 0;
 
-    for (let i = 0; i < numVertices; i++) {
-      for (let j = i; j < numVertices; j++) {
-        if (adjacencyMatrix[i][j] !== 0) {
-          incidenceMatrix[i][edgeIndex] = 1;
-          incidenceMatrix[j][edgeIndex] = -1;
-          edgeIndex++;
-        }
-      }
-    }
+  //   for (let i = 0; i < numVertices; i++) {
+  //     for (let j = i; j < numVertices; j++) {
+  //       if (adjacencyMatrix[i][j] !== 0) {
+  //         incidenceMatrix[i][edgeIndex] = 1;
+  //         incidenceMatrix[j][edgeIndex] = -1;
+  //         edgeIndex++;
+  //       }
+  //     }
+  //   }
 
-    return incidenceMatrix;
-  }
+  //   return incidenceMatrix;
+  // }
 
   static countEdges(adjacencyMatrix: number[][]): number {
     const numVertices = adjacencyMatrix.length;
@@ -241,137 +250,137 @@ class GraphStructures {
     return count;
   }
 
-  static incidenceToAdjacency(incidenceMatrix: number[][]): number[][] {
-    const numVertices = incidenceMatrix.length;
-    const numEdges = incidenceMatrix[0].length;
+  // static incidenceToAdjacency(incidenceMatrix: number[][]): number[][] {
+  //   const numVertices = incidenceMatrix.length;
+  //   const numEdges = incidenceMatrix[0].length;
 
-    const adjacencyMatrix: number[][] = Array.from(
-      { length: numVertices },
-      () => Array(numVertices).fill(0)
-    );
+  //   const adjacencyMatrix: number[][] = Array.from(
+  //     { length: numVertices },
+  //     () => Array(numVertices).fill(0)
+  //   );
 
-    for (let edgeIndex = 0; edgeIndex < numEdges; edgeIndex++) {
-      let startVertex = -1;
-      let endVertex = -1;
+  //   for (let edgeIndex = 0; edgeIndex < numEdges; edgeIndex++) {
+  //     let startVertex = -1;
+  //     let endVertex = -1;
 
-      for (let vertex = 0; vertex < numVertices; vertex++) {
-        if (incidenceMatrix[vertex][edgeIndex] === 1) {
-          startVertex = vertex;
-        } else if (incidenceMatrix[vertex][edgeIndex] === -1) {
-          endVertex = vertex;
-        }
-      }
+  //     for (let vertex = 0; vertex < numVertices; vertex++) {
+  //       if (incidenceMatrix[vertex][edgeIndex] === 1) {
+  //         startVertex = vertex;
+  //       } else if (incidenceMatrix[vertex][edgeIndex] === -1) {
+  //         endVertex = vertex;
+  //       }
+  //     }
 
-      if (startVertex !== -1 && endVertex !== -1) {
-        adjacencyMatrix[startVertex][endVertex] = 1;
-        adjacencyMatrix[endVertex][startVertex] = 1; // Para grafos não direcionados
-      }
-    }
+  //     if (startVertex !== -1 && endVertex !== -1) {
+  //       adjacencyMatrix[startVertex][endVertex] = 1;
+  //       adjacencyMatrix[endVertex][startVertex] = 1; // Para grafos não direcionados
+  //     }
+  //   }
 
-    return adjacencyMatrix;
-  }
+  //   return adjacencyMatrix;
+  // }
 
-  static incidenceToIncidenceTable(incidenceMatrix: number[][]): number[][] {
-    const numVertices = incidenceMatrix.length;
-    const numEdges = incidenceMatrix[0].length;
+  // static incidenceToIncidenceTable(incidenceMatrix: number[][]): number[][] {
+  //   const numVertices = incidenceMatrix.length;
+  //   const numEdges = incidenceMatrix[0].length;
 
-    const incidenceTable: number[][] = Array.from({ length: numVertices }, () =>
-      Array(numEdges).fill(0)
-    );
+  //   const incidenceTable: number[][] = Array.from({ length: numVertices }, () =>
+  //     Array(numEdges).fill(0)
+  //   );
 
-    for (let edgeIndex = 0; edgeIndex < numEdges; edgeIndex++) {
-      let startVertex = -1;
-      let endVertex = -1;
+  //   for (let edgeIndex = 0; edgeIndex < numEdges; edgeIndex++) {
+  //     let startVertex = -1;
+  //     let endVertex = -1;
 
-      for (let vertex = 0; vertex < numVertices; vertex++) {
-        if (incidenceMatrix[vertex][edgeIndex] === 1) {
-          startVertex = vertex;
-        } else if (incidenceMatrix[vertex][edgeIndex] === -1) {
-          endVertex = vertex;
-        }
-      }
+  //     for (let vertex = 0; vertex < numVertices; vertex++) {
+  //       if (incidenceMatrix[vertex][edgeIndex] === 1) {
+  //         startVertex = vertex;
+  //       } else if (incidenceMatrix[vertex][edgeIndex] === -1) {
+  //         endVertex = vertex;
+  //       }
+  //     }
 
-      if (startVertex !== -1 && endVertex !== -1) {
-        incidenceTable[startVertex][edgeIndex] = 1;
-        incidenceTable[endVertex][edgeIndex] = -1;
-      }
-    }
+  //     if (startVertex !== -1 && endVertex !== -1) {
+  //       incidenceTable[startVertex][edgeIndex] = 1;
+  //       incidenceTable[endVertex][edgeIndex] = -1;
+  //     }
+  //   }
 
-    return incidenceTable;
-  }
+  //   return incidenceTable;
+  // }
 
-  static adjacencyToIncidenceTable(adjacencyMatrix: number[][]): number[][] {
-    const numVertices = adjacencyMatrix.length;
-    const numEdges = this.countEdges(adjacencyMatrix);
+  // static adjacencyToIncidenceTable(adjacencyMatrix: number[][]): number[][] {
+  //   const numVertices = adjacencyMatrix.length;
+  //   const numEdges = this.countEdges(adjacencyMatrix);
 
-    const incidenceTable: number[][] = Array.from({ length: numVertices }, () =>
-      Array(numEdges).fill(0)
-    );
+  //   const incidenceTable: number[][] = Array.from({ length: numVertices }, () =>
+  //     Array(numEdges).fill(0)
+  //   );
 
-    let edgeIndex = 0;
+  //   let edgeIndex = 0;
 
-    for (let i = 0; i < numVertices; i++) {
-      for (let j = i; j < numVertices; j++) {
-        if (adjacencyMatrix[i][j] !== 0) {
-          incidenceTable[i][edgeIndex] = 1;
-          incidenceTable[j][edgeIndex] = -1;
-          edgeIndex++;
-        }
-      }
-    }
+  //   for (let i = 0; i < numVertices; i++) {
+  //     for (let j = i; j < numVertices; j++) {
+  //       if (adjacencyMatrix[i][j] !== 0) {
+  //         incidenceTable[i][edgeIndex] = 1;
+  //         incidenceTable[j][edgeIndex] = -1;
+  //         edgeIndex++;
+  //       }
+  //     }
+  //   }
 
-    return incidenceTable;
-  }
+  //   return incidenceTable;
+  // }
 
-  static incidenceTableToAdjacency(incidenceTable: number[][]): number[][] {
-    const numVertices = incidenceTable.length;
-    const numEdges = incidenceTable[0].length;
+  // static incidenceTableToAdjacency(incidenceTable: number[][]): number[][] {
+  //   const numVertices = incidenceTable.length;
+  //   const numEdges = incidenceTable[0].length;
 
-    const adjacencyMatrix: number[][] = Array.from(
-      { length: numVertices },
-      () => Array(numVertices).fill(0)
-    );
+  //   const adjacencyMatrix: number[][] = Array.from(
+  //     { length: numVertices },
+  //     () => Array(numVertices).fill(0)
+  //   );
 
-    for (let edgeIndex = 0; edgeIndex < numEdges; edgeIndex++) {
-      let startVertex = -1;
-      let endVertex = -1;
+  //   for (let edgeIndex = 0; edgeIndex < numEdges; edgeIndex++) {
+  //     let startVertex = -1;
+  //     let endVertex = -1;
 
-      for (let vertex = 0; vertex < numVertices; vertex++) {
-        if (incidenceTable[vertex][edgeIndex] === 1) {
-          startVertex = vertex;
-        } else if (incidenceTable[vertex][edgeIndex] === -1) {
-          endVertex = vertex;
-        }
-      }
+  //     for (let vertex = 0; vertex < numVertices; vertex++) {
+  //       if (incidenceTable[vertex][edgeIndex] === 1) {
+  //         startVertex = vertex;
+  //       } else if (incidenceTable[vertex][edgeIndex] === -1) {
+  //         endVertex = vertex;
+  //       }
+  //     }
 
-      if (startVertex !== -1 && endVertex !== -1) {
-        adjacencyMatrix[startVertex][endVertex] = 1;
-        adjacencyMatrix[endVertex][startVertex] = 1; // Para grafos não direcionados
-      }
-    }
+  //     if (startVertex !== -1 && endVertex !== -1) {
+  //       adjacencyMatrix[startVertex][endVertex] = 1;
+  //       adjacencyMatrix[endVertex][startVertex] = 1; // Para grafos não direcionados
+  //     }
+  //   }
 
-    return adjacencyMatrix;
-  }
+  //   return adjacencyMatrix;
+  // }
 
-  static incidenceTableToIncidenceMatrix(
-    incidenceTable: number[][]
-  ): number[][] {
-    const numVertices = incidenceTable.length;
-    const numEdges = incidenceTable[0].length;
+  // static incidenceTableToIncidenceMatrix(
+  //   incidenceTable: number[][]
+  // ): number[][] {
+  //   const numVertices = incidenceTable.length;
+  //   const numEdges = incidenceTable[0].length;
 
-    const incidenceMatrix: number[][] = Array.from({ length: numEdges }, () =>
-      Array(numVertices).fill(0)
-    );
+  //   const incidenceMatrix: number[][] = Array.from({ length: numEdges }, () =>
+  //     Array(numVertices).fill(0)
+  //   );
 
-    for (let vertexIndex = 0; vertexIndex < numVertices; vertexIndex++) {
-      for (let edgeIndex = 0; edgeIndex < numEdges; edgeIndex++) {
-        incidenceMatrix[edgeIndex][vertexIndex] =
-          incidenceTable[vertexIndex][edgeIndex];
-      }
-    }
+  //   for (let vertexIndex = 0; vertexIndex < numVertices; vertexIndex++) {
+  //     for (let edgeIndex = 0; edgeIndex < numEdges; edgeIndex++) {
+  //       incidenceMatrix[edgeIndex][vertexIndex] =
+  //         incidenceTable[vertexIndex][edgeIndex];
+  //     }
+  //   }
 
-    return incidenceMatrix;
-  }
+  //   return incidenceMatrix;
+  // }
 
   static incidenceToAdjacencyString(incidenceMatrix: number[][]): string {
     const numVertices = incidenceMatrix.length;
@@ -456,13 +465,13 @@ class GraphStructures {
     return adjacencyMatrix;
   }
 
-  static getArrayEdgesEulerianCycle(aObj: {
+  static getArrayEdgesEulerianCycle(list: {
     edges: { source: number; target: number }[];
   }) {
     let edges = "";
 
-    for (let i = 0; i < aObj.edges.length; i++) {
-      edges = `${edges} ${edges ? " - " : ""} ${aObj.edges[i].source + 1}`;
+    for (let i = 0; i < list.edges.length; i++) {
+      edges = `${edges} ${edges ? " - " : ""} ${list.edges[i].source + 1}`;
     }
 
     return edges;

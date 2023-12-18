@@ -273,7 +273,8 @@ function Header() {
           const nodes = graphFromFile?.breadthFirstSearch(parseInt(startNode));
 
           setGraphOutGraphViz(
-            GraphStructures.generateGraphFromNodesArray(nodes)
+            // GraphStructures.generateGraphFromNodesArray(nodes)
+            nodes.graphToGraphviz()
           );
         }
 
@@ -290,7 +291,8 @@ function Header() {
           const nodes = graphFromFile?.depthFirstSearch(parseInt(startNode));
 
           setGraphOutGraphViz(
-            GraphStructures.generateGraphFromNodesArray(nodes)
+            // GraphStructures.generateGraphFromNodesArray(nodes)
+            nodes.graphToGraphviz()
           );
         }
         break;

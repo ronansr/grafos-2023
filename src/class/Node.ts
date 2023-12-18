@@ -1,7 +1,6 @@
 import Edge from "./Edge";
 
 class NodeGraph {
-  // Propriedades
   firstEdge: Edge | null;
   lastEdge: Edge | null;
   id: number;
@@ -10,7 +9,6 @@ class NodeGraph {
   weight: number;
   nextNode: NodeGraph | null;
 
-  // Construtor
   constructor(id: number) {
     this.firstEdge = null;
     this.lastEdge = null;
@@ -21,42 +19,34 @@ class NodeGraph {
     this.nextNode = null;
   }
 
-  // Getter para a primeira aresta
   getFirstEdge(): Edge | null {
     return this.firstEdge;
   }
 
-  // Getter para a última aresta
   getLastEdge(): Edge | null {
     return this.lastEdge;
   }
 
-  // Getter para o grau de entrada
   getInDegree(): number {
     return this.inDegree;
   }
 
-  // Getter para o grau de saída
   getOutDegree(): number {
     return this.outDegree;
   }
 
-  // Getter para o peso do nó
   getWeight(): number {
     return this.weight;
   }
 
-  // Getter para o próximo nó
   getNextNode(): NodeGraph | null {
     return this.nextNode;
   }
 
-  // Setter para o próximo nó
   setNextNode(node: NodeGraph): void {
     this.nextNode = node;
   }
 
-  // Setter para o peso do nó
   setWeight(weight: number): void {
     this.weight = weight;
   }
